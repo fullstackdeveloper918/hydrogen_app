@@ -2,24 +2,62 @@ import {Suspense} from 'react';
 import {Await, NavLink} from '@remix-run/react';
 import {useAnalytics} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
+import logo from '../assets/Images/logo.png';
+import searchIcon from '../assets/Images/search.png';
+import checkIcon from '../assets/Images/check.png';
+import whatsappIcon from '../assets/Images/whatsapp.png';
+import userIcon from '../assets/Images/user.svg';
+import cartIcon from '../assets/Images/cart.svg';
+import menuIcon from '../assets/Images/menu.png';
 
 /**
  * @param {HeaderProps}
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
-  const {shop, menu} = header;
+  const {menu} = header;
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+    <header className="">
+      <p className="announcementBar">Get Shampoo Free on purchase of 999</p>
+      <div className="container">
+        <div className="navbar">
+          <NavLink prefetch="intent" to="/" end>
+            <img src={logo} alt="logo" />
+          </NavLink>
+          <div className="absoluteSearch">
+            <form className="search_container">
+              <input
+                type="text"
+                className="searc_bar"
+                placeholder="Search for..."
+              />
+              <img className="search_icon" src={searchIcon} alt="Search" />
+            </form>
+            <HeaderMenu
+              menu={menu}
+              viewport="desktop"
+              primaryDomainUrl={header.shop.primaryDomain.url}
+              publicStoreDomain={publicStoreDomain}
+            />
+          </div>
+          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+        </div>
+      </div>
+      <div className="deliveryMode desktopView">
+        <div className="deliveryModeContent container">
+          <p>
+            <img src={checkIcon} alt="checkimage" />
+            COD Available
+          </p>
+          <p>
+            <img src={checkIcon} alt="checkimage" />
+            Quick Delivery
+          </p>
+          <p>
+            <img src={checkIcon} alt="checkimage" />
+            World-wide Shipping
+          </p>
+        </div>
+      </div>
     </header>
   );
 }
@@ -40,6 +78,7 @@ export function HeaderMenu({
 }) {
   const className = `header-menu-${viewport}`;
   const {close} = useAside();
+  console.log(menu, 'menu');
 
   return (
     <nav className={className} role="navigation">
@@ -71,7 +110,6 @@ export function HeaderMenu({
             key={item.id}
             onClick={close}
             prefetch="intent"
-            style={activeLinkStyle}
             to={url}
           >
             {item.title}
@@ -87,41 +125,46 @@ export function HeaderMenu({
  */
 function HeaderCtas({isLoggedIn, cart}) {
   return (
-    <nav className="header-ctas" role="navigation">
+    <nav className="header-ctas navIcons" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+      <a href="/">
+        <img src={whatsappIcon} alt="whatsappIcon" />
+      </a>
+      <NavLink
+        className=""
+        prefetch="intent"
+        to="/account"
+        style={activeLinkStyle}
+      >
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
+            {(isLoggedIn) =>
+              isLoggedIn ? (
+                <img src={userIcon} alt="userIcon" />
+              ) : (
+                <img src={userIcon} alt="userIcon" />
+              )
+            }
           </Await>
         </Suspense>
       </NavLink>
-      <SearchToggle />
+      {/* <SearchToggle /> */}
       <CartToggle cart={cart} />
+      <a href="/" className="desktopView">
+        <img src={menuIcon} alt="menuIcon" />
+      </a>
     </nav>
   );
 }
 
-function HeaderMenuMobileToggle() {
-  const {open} = useAside();
-  return (
-    <button
-      className="header-menu-mobile-toggle reset"
-      onClick={() => open('mobile')}
-    >
-      <h3>☰</h3>
-    </button>
-  );
-}
-
-function SearchToggle() {
-  const {open} = useAside();
-  return (
-    <button className="reset" onClick={() => open('search')}>
-      Search
-    </button>
-  );
-}
+// function SearchToggle() {
+//   const {open} = useAside();
+//   return (
+//     <button className="reset" onClick={() => open('search')}>
+//       Search
+//     </button>
+//   );
+// }
 
 /**
  * @param {{count: number | null}}
@@ -132,6 +175,7 @@ function CartBadge({count}) {
 
   return (
     <a
+      className="relative"
       href="/cart"
       onClick={(e) => {
         e.preventDefault();
@@ -144,8 +188,24 @@ function CartBadge({count}) {
         });
       }}
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
+      <img src={cartIcon} alt="cartIcon" />{' '}
+      {count === null ? (
+        <span>&nbsp;</span>
+      ) : (
+        <span className="cartCount">{count}</span>
+      )}
     </a>
+  );
+}
+function HeaderMenuMobileToggle() {
+  const {open} = useAside();
+  return (
+    <button
+      className="header-menu-mobile-toggle reset"
+      onClick={() => open('mobile')}
+    >
+      <img src={menuIcon} alt="menuIcon" />
+    </button>
   );
 }
 

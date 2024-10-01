@@ -2,7 +2,20 @@ import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-
+import banner from '../assets/Images/banner.png';
+import million from '../assets/Images/million.png';
+import sharkTank from '../assets/Images/Shark_Tank.png';
+import disney from '../assets/Images/disney.png';
+import divya from '../assets/Images/Divya-Bhaskar.png';
+import gujarati from '../assets/Images/Tv9-gujarati-logo 1.png';
+import dainik from '../assets/Images/dainik-bhaskar-logo 1.png';
+import et from '../assets/Images/et-logo4px 1.png';
+import ndtv from '../assets/Images/ndtv.png';
+import hindustantimes from '../assets/Images/hindustantimes.png';
+import indiaTime from '../assets/Images/indiaTime.png';
+import news18 from '../assets/Images/news18.png';
+import sellerRIng from '../assets/Images/SELLER.png';
+import hero from '../assets/Images/freebies_monsoon.png';
 /**
  * @type {MetaFunction}
  */
@@ -64,34 +77,150 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
+      <Hero />
+      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <RecommendedProducts products={data.recommendedProducts} />
+
+      <BestSeller />
+      <DiscountCoupons />
+      {/* <ProductCards /> */}
+      <Partners />
+
+      <div className="bannerads">
+        <img src={banner} className="bannerImages" alt="bannerImage" />
+      </div>
     </div>
   );
 }
 
+// banner section
+function Hero() {
+  return (
+    <div>
+      <img src={hero} className="heroImage" alt="" />
+    </div>
+  );
+}
+
+// product cards section
+// function ProductCards() {
+//   return (
+//     <div className="productCards">
+//       <div className="container">
+//         <div className="commonHeader">
+//           <h2>Best Sellers</h2>
+//           <button>
+//             View All <img src={dropdown} alt="img" />
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// mobile best seller
+function BestSeller() {
+  return (
+    <div className="happyCustomer tabView">
+      <div className="container">
+        <div className="partnerWrapper">
+          <div className="sellerBox">
+            <img src={sellerRIng} alt="sharkTank" />
+            <h3>BestSellers</h3>
+          </div>
+          <div className="sellerBox">
+            <img src={sellerRIng} alt="sharkTank" />
+            <h3>Hair Care</h3>
+          </div>
+          <div className="sellerBox">
+            <img src={sellerRIng} alt="sharkTank" />
+            <h3>Skin Care</h3>
+          </div>
+          <div className="sellerBox">
+            <img src={sellerRIng} alt="sharkTank" />
+            <h3>Health</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function DiscountCoupons() {
+  return (
+    <div className="happyCustomer tabView">
+      <div className="container">
+        <div className="partnerWrapper couponBoxWrapper">
+          <div className="couponBox">
+            <h3>Unlock Exclusive Discount</h3>
+            <button>DOWNLOAD APP</button>
+          </div>
+          <div className="couponBox">
+            <h3>tackle hair struggles together</h3>
+            <button>DOWNLOAD APP</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Partners() {
+  return (
+    <div className="happyCustomer">
+      <div className="container">
+        <div className="commonHeading">
+          <div className="imageHeading">
+            <img src={million} alt="million" />
+            <div>
+              <h2>1M+ Happy Customers</h2>
+              <span>82%* saw results in 6 months</span>
+            </div>
+          </div>
+          <p>*As per monthly poll conducted on instagram</p>
+        </div>
+        <div className="partnerWrapper">
+          <div className="partnerImg ">
+            <img src={sharkTank} alt="sharkTank" className="px-2" />
+          </div>
+          <div className="partnerImg">
+            <img src={disney} alt="sharkTank" />
+          </div>
+
+          <div className="partnerImg">
+            <img src={divya} alt="sharkTank" />
+          </div>
+          <div className="partnerImg">
+            <img src={gujarati} alt="sharkTank" />
+          </div>
+          <div className="partnerImg">
+            <img src={dainik} alt="sharkTank" />
+          </div>
+          <div className="partnerImg p-0">
+            <img src={indiaTime} alt="sharkTank" />
+          </div>
+
+          <div className="partnerImg">
+            <img src={news18} alt="sharkTank" />
+          </div>
+          <div className="partnerImg">
+            <img src={hindustantimes} alt="sharkTank" />
+          </div>
+          <div className="partnerImg">
+            <img src={ndtv} alt="sharkTank" />
+          </div>
+          <div className="partnerImg">
+            <img src={et} alt="sharkTank" className="px-2" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 /**
  * @param {{
  *   collection: FeaturedCollectionFragment;
  * }}
  */
-function FeaturedCollection({collection}) {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
-  );
-}
 
 /**
  * @param {{
@@ -100,17 +229,17 @@ function FeaturedCollection({collection}) {
  */
 function RecommendedProducts({products}) {
   return (
-    <div className="recommended-products">
+    <div className="recommended-products container">
       <h2>Recommended Products</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
-            <div className="recommended-products-grid">
+            <div className="recommended-products-grid relative">
               {response
                 ? response.products.nodes.map((product) => (
                     <Link
                       key={product.id}
-                      className="recommended-product"
+                      className="recommended-product relative"
                       to={`/products/${product.handle}`}
                     >
                       <Image
@@ -118,10 +247,14 @@ function RecommendedProducts({products}) {
                         aspectRatio="1/1"
                         sizes="(min-width: 45em) 20vw, 50vw"
                       />
-                      <h4>{product.title}</h4>
-                      <small>
-                        <Money data={product.priceRange.minVariantPrice} />
-                      </small>
+                      <span>Best Seller</span>
+                      <div className="">
+                        <h4>{product.title}</h4>
+                        <small>
+                          <Money data={product.priceRange.minVariantPrice} />
+                        </small>
+                      </div>
+                      <button> ADD TO CART</button>
                     </Link>
                   ))
                 : null}
