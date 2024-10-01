@@ -12,7 +12,7 @@ import {CartSummary} from './CartSummary';
 export function CartMain({layout, cart: originalCart}) {
   // The useOptimisticCart hook applies pending actions to the cart
   // so the user immediately sees feedback when they modify the cart.
-  // cart added something to check deployment
+  // cart added something to check deployment hence
   const cart = useOptimisticCart(originalCart);
 
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
